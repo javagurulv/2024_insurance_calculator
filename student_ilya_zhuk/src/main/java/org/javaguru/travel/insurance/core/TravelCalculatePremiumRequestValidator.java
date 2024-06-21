@@ -21,7 +21,7 @@ class TravelCalculatePremiumRequestValidator   {
     }
 
     private Optional<ValidatorError> validatePersonFirstName(TravelCalculatePremiumRequest request) {
-        return (request.getPersonFirstname() == null || request.getPersonLastname().trim().isEmpty())
+        return (request.getPersonFirstname() == null || request.getPersonFirstname().trim().isEmpty())
                 ? Optional.of(new ValidatorError("personFirstName", "Must not be empty!"))
                 : Optional.empty();
     }
@@ -36,26 +36,15 @@ class TravelCalculatePremiumRequestValidator   {
         Date agreementDateFrom = request.getAgreementDateFrom();
         Date agreementDateTo = request.getAgreementDateTo();
 
-        if (agreementDateFrom == null || agreementDateTo == null) {
-            return Optional.empty();
+        if (agreementDateFrom == null) {
+            return Optional.of(new ValidatorError("agreementDates", "Date From must not be null!"));
         }
 
-        if (agreementDateFrom.after(agreementDateTo)) {
+        if (agreementDateTo != null && agreementDateFrom.after(agreementDateTo)) {
             return Optional.of(new ValidatorError("agreementDates", "Date From must not be after Date To!"));
         }
 
         return Optional.empty();
     }
-    private boolean isValidDate(Date date) {
-        SimpleDateFormat dateFormat = new SimpleDateFormat("30.02");
 
-        dateFormat.setLenient(false);
-
-        try {
-            dateFormat.parse(dateFormat.format(date));
-            return true;
-        } catch (ParseException e) {
-            return false;
-        }
-    }
 }
