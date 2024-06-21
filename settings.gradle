@@ -1,6 +1,4 @@
 include 'student_ilya_zhuk'
-
-
 include 'teacher:step_0'
 include 'teacher:step_1'
 include 'teacher:step_2'
