@@ -1,4 +1,4 @@
-package org.javaguru.travel.insurance.datavalidator;
+package org.javaguru.travel.insurance.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -14,13 +14,16 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 public class TravelCalculatePremiumResponse extends CoreResponse {
+
     private String personFirstName;
     private String personLastName;
     private Date agreementDateFrom;
     private Date agreementDateTo;
+
     private BigDecimal agreementPrice;
 
-    public TravelCalculatePremiumResponse(List<ValidatorError> validatorError) {
-        super(validatorError);
+    public TravelCalculatePremiumResponse(List<ValidationError> errors) {
+        super(errors);
     }
+
 }
