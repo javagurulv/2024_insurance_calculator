@@ -14,6 +14,7 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 public class TravelCalculatePremiumRequestValidatorTest {
@@ -31,43 +32,41 @@ public class TravelCalculatePremiumRequestValidatorTest {
 
     @Test
     public void testValidate_withValidRequest() {
-        // Arrange
         when(mockRequest.getPersonFirstname()).thenReturn("John");
         when(mockRequest.getPersonLastname()).thenReturn("Doe");
         when(mockRequest.getAgreementDateFrom()).thenReturn(new Date());
         when(mockRequest.getAgreementDateTo()).thenReturn(new Date(System.currentTimeMillis() + 1000));
 
-        // Act
         List<ValidatorError> errors = validator.validate(mockRequest);
 
-        // Assert
         assertThat(errors).isEmpty();
     }
 
     @Test
     public void testValidate_withMissingFirstName() {
-        // Arrange
         when(mockRequest.getPersonFirstname()).thenReturn(null);
         when(mockRequest.getPersonLastname()).thenReturn("Doe");
         when(mockRequest.getAgreementDateFrom()).thenReturn(new Date());
         when(mockRequest.getAgreementDateTo()).thenReturn(new Date(System.currentTimeMillis() + 1000));
 
-        // Act
         List<ValidatorError> errors = validator.validate(mockRequest);
 
-        // Assert
         assertThat(errors).hasSize(1);
         assertThat(errors.get(0).getField()).isEqualTo("personFirstName");
         assertThat(errors.get(0).getMessage()).isEqualTo("Must not be empty!");
     }
 
+
     @Test
-    public void testValidate_withMissingAgreementDateFrom() {
+    void testValidate_withMissingAgreementDateFrom() {
         // Arrange
+        TravelCalculatePremiumRequest mockRequest = mock(TravelCalculatePremiumRequest.class);
         when(mockRequest.getPersonFirstname()).thenReturn("John");
         when(mockRequest.getPersonLastname()).thenReturn("Doe");
         when(mockRequest.getAgreementDateFrom()).thenReturn(null); // Установим null для agreementDateFrom
         when(mockRequest.getAgreementDateTo()).thenReturn(new Date(System.currentTimeMillis() + 1000)); // Установим будущую дату
+
+        TravelCalculatePremiumRequestValidator validator = new TravelCalculatePremiumRequestValidator();
 
         // Act
         List<ValidatorError> errors = validator.validate(mockRequest);
@@ -77,6 +76,7 @@ public class TravelCalculatePremiumRequestValidatorTest {
         assertThat(errors.get(0).getField()).isEqualTo("agreementDates");
         assertThat(errors.get(0).getMessage()).isEqualTo("Date From must not be null!");
     }
+
 }
 
 
